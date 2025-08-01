@@ -1,32 +1,37 @@
-const CACHE_NAME = 'custom-cache-v1';
-
-// index.json のパス（公開ルートにある前提）
-const INDEX_JSON_URL = 'index.json';
-
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(async cache => {
-      const response = await fetch(INDEX_JSON_URL);
-      const files = await response.json();
+    caches.open('easyrpg-cache-v1').then(async cache => {
+      const response = await fetch('index.json');
+      const data = await response.json();
 
-      const urlsToCache = Array.isArray(files) ? files : [];
+      const allFiles = [];
 
-      // index.json 自体もキャッシュに入れる
-      urlsToCache.push(INDEX_JSON_URL);
+      function walk(obj, path = '') {
+        for (const key in obj) {
+          if (key === '_dirname') continue;
+          const value = obj[key];
+          if (typeof value === 'string') {
+            allFiles.push(`${path}${value}`);
+          } else if (typeof value === 'object') {
+            walk(value, `${path}${value._dirname ? value._dirname + '/' : ''}`);
+          }
+        }
+      }
 
-      return cache.addAll(urlsToCache);
+      if (data.cache) {
+        walk(data.cache);
+      }
+
+      allFiles.push('/', 'index.html', 'index.js', 'index.json');
+      await cache.addAll(allFiles);
     })
   );
 });
 
-self.addEventListener('activate', event => {
-  event.waitUntil(self.clients.claim());
-});
-
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request);
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
     })
   );
 });
