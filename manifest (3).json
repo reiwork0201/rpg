@@ -1,0 +1,12 @@
+{
+  "display_override": [
+    "window-controls-overlay",
+    "fullscreen"
+  ],
+  "name": "EasyRPG",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "short_name": "EasyRPG",
+  "id": "Player",
+  "description": "web player"
+}
