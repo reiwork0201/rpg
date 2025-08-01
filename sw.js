@@ -26,12 +26,13 @@ self.addEventListener('install', event => {
         }
 
         allFiles.push('/', 'index.html', 'index.js', 'index.json');
-        const uniqueFiles = [...new Set(allFiles)];
+
+        const uniqueFiles = [...new Set(allFiles)]; // ← ここで重複排除！
 
         console.log('Caching files:', uniqueFiles);
         await cache.addAll(uniqueFiles);
       } catch (e) {
-        console.error('SW install error:', e);
+        console.error('Cache install failed:', e);
       }
     })()
   );
