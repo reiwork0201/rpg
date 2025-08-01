@@ -21,14 +21,15 @@ self.addEventListener('install', event => {
 
         if (data.cache) walk(data.cache);
 
-        // 必要なファイルを追加（重複しないようセットで管理）
-        const extraFiles = ['/', '/index.html', '/index.js', '/index.json'];
-        extraFiles.forEach(f => {
-          if (!allFiles.includes(f)) allFiles.push(f);
-        });
+        // 明示的に追加したいファイルを追加
+        ['/', '/index.html', '/index.js', '/index.json'].forEach(f => allFiles.push(f));
 
-        await cache.addAll(allFiles);
-        console.log('Cached files:', allFiles);
+        // 重複削除
+        const uniqueFiles = [...new Set(allFiles)];
+
+        console.log('Files to cache:', uniqueFiles);
+
+        await cache.addAll(uniqueFiles);
       } catch (e) {
         console.error('Cache install failed:', e);
       }
