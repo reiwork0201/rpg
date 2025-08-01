@@ -88,11 +88,11 @@
     }
     #apad {
       display: grid;
-      grid-template-columns: repeat(2, var(--controls-size));
+      grid-template-columns: repeat(3, var(--controls-size));
       grid-template-rows: repeat(2, var(--controls-size));
-      gap: calc(var(--controls-size) * 0.2);
-      width: calc(2 * var(--controls-size) + var(--controls-size) * 0.2);
-      height: calc(2 * var(--controls-size) + var(--controls-size) * 0.2);
+      gap: calc(var(--controls-size) * 0.15);
+      width: calc(3 * var(--controls-size) + 2 * var(--controls-size) * 0.15);
+      height: calc(2 * var(--controls-size) + var(--controls-size) * 0.15);
     }
     #apad > * {
       width: var(--controls-size);
@@ -111,19 +111,23 @@
       grid-column: 1;
       grid-row: 1;
     }
-    #apad-a {
+    #apad-m {
       grid-column: 2;
+      grid-row: 1;
+    }
+    #apad-a {
+      grid-column: 3;
       grid-row: 2;
     }
     #apad-b {
-      grid-column: 1;
+      grid-column: 2;
       grid-row: 2;
     }
     #dpad path:not(.active),
     #apad > *:not(.active) {
       opacity: 0.4;
     }
-    /* 3本線ボタンのスタイル */
+    /* 3æ¬ç·ãã¿ã³ã®ã¹ã¿ã¤ã« */
     #menu-button {
       position: fixed;
       top: 1rem;
@@ -166,7 +170,7 @@
   <div id="viewport">
     <canvas id="canvas" tabindex="-1" class="unselectable"></canvas>
 
-    <!-- 3本線ボタン (F1キー) -->
+    <!-- 3æ¬ç·ãã¿ã³ (F1ã­ã¼) -->
     <button id="menu-button" class="unselectable" data-key="F1">
       <span></span>
       <span></span>
@@ -185,6 +189,7 @@
 
     <div id="apad" class="unselectable">
       <button id="apad-s" data-key="ShiftLeft">S</button>
+      <button id="apad-m" data-key="KeyM">M</button>
       <button id="apad-a" data-key="Enter">A</button>
       <button id="apad-b" data-key="Escape">B</button>
     </div>
@@ -194,7 +199,7 @@
 
   <script>
     const hasTouchscreen = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-    const preventNativeKeys = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', ' ', 'F1', 'F12', 'Enter', 'Escape'];
+    const preventNativeKeys = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', ' ', 'F1', 'F12', 'Enter', 'Escape', 'KeyM'];
     const keys = new Map();
     const keysDown = new Map();
     const canvas = document.getElementById('canvas');
