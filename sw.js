@@ -1,8 +1,9 @@
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open('easyrpg-cache-v1').then(async cache => {
+    (async () => {
       try {
-        const response = await fetch('/index.json');
+        const cache = await caches.open('easyrpg-cache-v1');
+        const response = await fetch('index.json');
         const data = await response.json();
 
         const allFiles = [];
@@ -12,27 +13,34 @@ self.addEventListener('install', event => {
             if (key === '_dirname') continue;
             const value = obj[key];
             if (typeof value === 'string') {
-              allFiles.push(path + encodeURI(value));
+              allFiles.push(`games/default/${path}${value}`);
             } else if (typeof value === 'object') {
-              walk(value, path + (value._dirname ? value._dirname + '/' : ''));
+              const subdir = value._dirname ? `${value._dirname}/` : '';
+              walk(value, `${path}${subdir}`);
             }
           }
         }
 
-        if (data.cache) walk(data.cache);
+        if (data.cache) {
+          walk(data.cache);
+        }
 
-        // 明示的に追加したいファイルを追加
-        ['/', '/index.html', '/index.js', '/index.json'].forEach(f => allFiles.push(f));
-
-        // 重複削除
+        allFiles.push('/', 'index.html', 'index.js', 'index.json');
         const uniqueFiles = [...new Set(allFiles)];
 
-        console.log('Files to cache:', uniqueFiles);
-
+        console.log('Caching files:', uniqueFiles);
         await cache.addAll(uniqueFiles);
       } catch (e) {
-        console.error('Cache install failed:', e);
+        console.error('SW install error:', e);
       }
+    })()
+  );
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
     })
   );
 });
