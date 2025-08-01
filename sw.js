@@ -7,13 +7,14 @@ self.addEventListener('install', event => {
       const allFiles = [];
 
       function walk(obj, path = '') {
+        const dir = obj._dirname ? obj._dirname + '/' : '';
         for (const key in obj) {
           if (key === '_dirname') continue;
           const value = obj[key];
           if (typeof value === 'string') {
-            allFiles.push(`${path}${value}`);
+            allFiles.push(path + dir + value);
           } else if (typeof value === 'object') {
-            walk(value, `${path}${value._dirname ? value._dirname + '/' : ''}`);
+            walk(value, path + dir);
           }
         }
       }
