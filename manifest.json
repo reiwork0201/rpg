@@ -1,14 +1,21 @@
 {
-  "name": "EasyRPG Offline Player",
-  "short_name": "EasyRPG",
-  "start_url": "./index.html",
+  "name": "easyrpg",
+  "short_name": "Player",
+  "id": "15701570",
+  "description": "this is a rpg player",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "theme_color": "#61f666",
+  "background_color": "#7bf2cc",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "/icon-192x192.png",
       "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
