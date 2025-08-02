@@ -8,10 +8,14 @@
     :root {
       --color-gray: hsl(0, 0%, 55%);
       --controls-size: 10vh;
+      --button-size: 50px;
+      --small-button-size: 40px;
     }
     @media (orientation: landscape) {
       :root {
         --controls-size: 20vh;
+        --button-size: 50px;
+        --small-button-size: 45px;
       }
     }
     html {
@@ -67,16 +71,12 @@
     img#canvas {
       object-fit: contain;
     }
-    #dpad,
-    #apad {
-      position: fixed;
-      bottom: 1rem;
-    }
+
+    /* 十字ボタン（左下） */
     #dpad {
-      left: 1rem;
-    }
-    #apad {
-      right: 1rem;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
     }
     #dpad svg {
       width: calc(2 * var(--controls-size));
@@ -86,73 +86,201 @@
     #dpad svg rect {
       opacity: 0.4;
     }
+
+    /* 右側のボタン群 - 画面全体に散らす */
     #apad {
-      display: grid;
-      grid-template-columns: repeat(3, var(--controls-size));
-      grid-template-rows: repeat(2, var(--controls-size));
-      gap: calc(var(--controls-size) * 0.15);
-      width: calc(3 * var(--controls-size) + 2 * var(--controls-size) * 0.15);
-      height: calc(2 * var(--controls-size) + var(--controls-size) * 0.15);
+      position: fixed;
+      bottom: 0px;
+      right: 0px;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
     }
-    #apad > * {
-      width: var(--controls-size);
-      height: var(--controls-size);
+
+    /* 各ボタンにpointer-eventsを復活 */
+    .game-button {
+      pointer-events: all;
+    }
+
+    /* 肩ボタン（L/R） - 左側に縦配置、間隔調整 */
+    #shoulders {
+      position: fixed;
+      top: 120px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* 設定ボタン（三本線、左上） */
+    #menu-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+    }
+
+    /* その他のボタン（+、-、*） - 上部中央に配置 */
+    #extra-buttons {
+      position: fixed;
+      top: 10px;
+      left: 55%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+    }
+
+    /* 共通ボタンスタイル */
+    .game-button {
       background-color: var(--color-gray);
+      border: 2px solid rgba(255, 255, 255, 0.3);
       border-radius: 50%;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: calc(var(--controls-size) * 0.4);
-      font-weight: bold;
-      border: none;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.1s ease;
+      position: absolute;
+    }
+
+    .game-button:not(.active) {
+      opacity: 0.7;
+    }
+
+    .game-button.active {
+      opacity: 1;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: black;
+      transform: scale(0.95);
+    }
+
+       /* X */
+#btn-x {
+  width: var(--button-size);
+  height: var(--button-size);
+  right: 60px;
+  bottom: 130px;
+}
+
+/* A */
+#btn-a {
+  width: var(--button-size);
+  height: var(--button-size);
+  right: 10px;
+  bottom: 80px;
+}
+
+/* B */
+#btn-b {
+  width: var(--button-size);
+  height: var(--button-size);
+  right: 60px;
+  bottom: 30px;
+}
+
+/* Y（Xの左） */
+#btn-y {
+  width: var(--button-size);
+  height: var(--button-size);
+  right: 110px;
+  bottom: 80px;
+}
+
+/* --- 上に四角く並ぶボタン群 LRTS --- */
+
+/* 正方形エリアの基準左上： right: 120px; bottom: 240px; */
+
+/* L（左上） */
+#btn-l {
+  width: var(--button-size);
+  height: var(--button-size);
+  position: absolute;
+  right: 110px;
+  bottom: 230px;
+}
+
+/* R（右上） */
+#btn-r {
+  width: var(--button-size);
+  height: var(--button-size);
+  position: absolute;
+  right: 10px;
+  bottom: 230px;
+}
+
+/* T（左下） */
+#btn-t {
+  width: var(--button-size);
+  height: var(--button-size);
+  position: absolute;
+  right: 110px;
+  bottom: 170px;
+}
+
+/* S（右下） */
+#btn-s {
+  width: var(--button-size);
+  height: var(--button-size);
+  position: absolute;
+  right: 10px;
+  bottom: 170px;
+}
+
+
+
+    /* 設定ボタン */
+    #btn-menu {
+      width: var(--small-button-size);
+      height: var(--small-button-size);
+      background-color: var(--color-gray);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 5px;
       color: white;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: all 0.1s ease;
     }
-    #apad-s {
-      grid-column: 1;
-      grid-row: 1;
+
+    #btn-menu.active {
+      opacity: 1;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: black;
     }
-    #apad-m {
-      grid-column: 2;
-      grid-row: 1;
+
+    /* その他のボタン - サイズを少し大きく */
+    .extra-button {
+      width: 40px;
+      height: 40px;
+      background-color: var(--color-gray);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: all 0.1s ease;
     }
-    #apad-a {
-      grid-column: 3;
-      grid-row: 2;
+
+    .extra-button.active {
+      opacity: 1;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: black;
     }
-    #apad-b {
-      grid-column: 2;
-      grid-row: 2;
-    }
+
     #dpad path:not(.active),
     #apad > *:not(.active) {
       opacity: 0.4;
-    }
-    /* 3æ¬ç·ãã¿ã³ã®ã¹ã¿ã¤ã« */
-    #menu-button {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      width: calc(var(--controls-size) * 0.8);
-      height: calc(var(--controls-size) * 0.8);
-      background-color: var(--color-gray);
-      border: none;
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: calc(var(--controls-size) * 0.08);
-      opacity: 0.6;
-      cursor: pointer;
-    }
-    #menu-button span {
-      width: 60%;
-      height: 3px;
-      background-color: white;
-      border-radius: 2px;
-    }
-    #menu-button.active {
-      opacity: 1;
     }
   </style>
 </head>
@@ -170,13 +298,7 @@
   <div id="viewport">
     <canvas id="canvas" tabindex="-1" class="unselectable"></canvas>
 
-    <!-- 3æ¬ç·ãã¿ã³ (F1ã­ã¼) -->
-    <button id="menu-button" class="unselectable" data-key="F1">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
+    <!-- 十字ボタン（左下） -->
     <div id="dpad" class="unselectable">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72">
         <path id="dpad-up" data-key="ArrowUp" d="M48,5.8C48,2.5,45.4,0,42,0H29.9C26.6,0,24,2.4,24,5.8V24h24V5.8z" />
@@ -187,11 +309,46 @@
       </svg>
     </div>
 
+    <!-- 右側のボタン群 -->
     <div id="apad" class="unselectable">
-      <button id="apad-s" data-key="ShiftLeft">S</button>
-      <button id="apad-m" data-key="KeyM">M</button>
-      <button id="apad-a" data-key="Enter">A</button>
-      <button id="apad-b" data-key="Escape">B</button>
+      <!-- Aボタン（決定）一番右 -->
+      <div id="btn-a" class="game-button" data-key="KeyZ">A</div>
+      <!-- Bボタン（キャンセル）Aの少し左下 -->
+      <div id="btn-b" class="game-button" data-key="KeyX">B</div>
+      <!-- Yボタン（Aの左） -->
+      <div id="btn-y" class="game-button" data-key="KeyC">Y</div>
+      <!-- Xボタン（Aの少し左上） -->
+      <div id="btn-x" class="game-button" data-key="KeyV">X</div>
+      <!-- Sボタン（ダッシュ）Xの少し右上 -->
+      <div id="btn-s" class="game-button" data-key="ShiftLeft">S</div>
+      <!-- Tボタン（サブメニュー）Sの少し左 -->
+      <div id="btn-t" class="game-button" data-key="Tab">T</div>
+      <!-- 肩ボタン（四角内配置） -->
+      <div id="btn-l" class="game-button" data-key="KeyQ">L</div>
+      <div id="btn-r" class="game-button" data-key="KeyW">R</div>
+
+    </div>
+
+    <!-- 肩ボタン（Sの上） -->
+    <div id="shoulders" class="unselectable">
+      <div id="btn-l" class="game-button" data-key="KeyQ">L</div>
+      <div id="btn-r" class="game-button" data-key="KeyW">R</div>
+    </div>
+
+    <!-- 設定ボタン（三本線、左上） -->
+    <div id="menu-button" class="unselectable">
+      <div id="btn-menu" data-key="F1">☰</div>
+    </div>
+
+    <!-- その他のボタン（+、-、*） -->
+      <div id="extra-buttons" class="unselectable">
+      <div class="extra-button" data-key="F11">F11</div>
+      <div class="extra-button" data-key="CTRLLeft">CTRL</div>
+      <div class="extra-button" data-key="F">F</div>
+      <div class="extra-button" data-key="F12">F12</div>      
+      <div class="extra-button" data-key="Plus">+</div>
+      <div class="extra-button" data-key="Minus">-</div>
+      <div class="extra-button" data-key="Multiply">*</div>
     </div>
   </div>
 
@@ -199,7 +356,7 @@
 
   <script>
     const hasTouchscreen = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-    const preventNativeKeys = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', ' ', 'F1', 'F12', 'Enter', 'Escape', 'KeyM'];
+    const preventNativeKeys = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', ' ', 'F12'];
     const keys = new Map();
     const keysDown = new Map();
     const canvas = document.getElementById('canvas');
@@ -296,7 +453,18 @@
     function addGamepad(gamepad) {
       if (gamepad == undefined) return;
       gamepads[gamepad.index] = gamepad;
-      updateTouchControlsVisibility();
+      // キーボードイベントも処理
+    window.addEventListener('keydown', event => {
+      if (preventNativeKeys.includes(event.key)) {
+        event.preventDefault();
+      }
+    });
+
+    canvas.addEventListener('contextmenu', event => {
+      event.preventDefault();
+    });
+
+    updateTouchControlsVisibility();
     }
 
     function removeGamepad(gamepad) {
@@ -330,43 +498,26 @@
     window.addEventListener('gamepaddisconnected', e => removeGamepad(e.gamepad));
 
     function updateTouchControlsVisibility() {
-      if (hasTouchscreen && Object.keys(gamepads).length === 0) {
-        for (const elem of document.querySelectorAll('#dpad, #apad, #menu-button')) {
-          elem.style.display = '';
-        }
-      } else {
-        for (const elem of document.querySelectorAll('#dpad, #apad, #menu-button')) {
-          elem.style.display = 'none';
-        }
+      // 常時表示
+      for (const elem of document.querySelectorAll('#dpad, #apad, #shoulders, #menu-button, #extra-buttons')) {
+        elem.style.display = '';
       }
     }
 
-    if (hasTouchscreen) {
-      for (const button of document.querySelectorAll('[data-key]')) {
-        bindKey(button, button.dataset.key);
-      }
-    } else {
-      window.addEventListener('keydown', event => {
-        if (preventNativeKeys.includes(event.key)) {
-          event.preventDefault();
-        }
-      });
-
-      canvas.addEventListener('contextmenu', event => {
-        event.preventDefault();
-      });
+    // 常時表示：タッチスクリーンでもマウス/キーボードでもボタンを表示
+    for (const button of document.querySelectorAll('[data-key]')) {
+      bindKey(button, button.dataset.key);
     }
 
     updateTouchControlsVisibility();
   </script>
 
- <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-      .then(() => console.log('Service Worker registered'))
-      .catch(err => console.error('SW registration failed:', err));
-  }
-</script>
-
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker registered'))
+        .catch(err => console.error('SW registration failed:', err));
+    }
+  </script>
 </body>
 </html>
